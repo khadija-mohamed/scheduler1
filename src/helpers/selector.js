@@ -19,14 +19,13 @@ return appointmentArray
 }
 
 export  function getInterviewersForDay(state, day) {
-  const appointmentArr = getAppointmentsForDay(state, day)
-  if (!appointmentArr.length) { return []; }
-  const interviewersArray = [];
-  console.log("mapped ---> ",appointmentArr)
+  if (!state.interviewers) return [];
+  const filteredDay = state.days.filter( mappedDay => mappedDay.name === day)[0];
 
-  for (let item of appointmentArr){
- console.log(item.interview)
-   if ( item.interview ) 
-   {interviewersArray.push(state.interviewers[item.interview.interviewer])}
-  }
-return interviewersArray}
+  if (!filteredDay) return [];
+
+  if (!filteredDay.interviewers) return [];
+
+  const result =  Object.values(state.interviewers).filter( interviewer => filteredDay.interviewers.includes(interviewer.id))
+  return result;
+}
