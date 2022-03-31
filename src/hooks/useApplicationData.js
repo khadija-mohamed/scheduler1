@@ -1,82 +1,90 @@
-import React, { useReducer, useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import axios from "axios";
-import reducer, {
-  SET_DAY,
-  SET_APPLICATION_DATA,
-  SET_INTERVIEW
-} from "reducers/application";
 
-export default function useApplicationData() {
+export default function useApplicationData(initial) {
+
+  const SET_DAY = "SET_DAY";
+  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+  const SET_INTERVIEW = "SET_INTERVIEW";
+  
+  const reducer = (state, action) => {
+    switch(action.type) {
+      case SET_DAY: {
+        return { ...state, day: action.day }
+      }
+      case SET_APPLICATION_DATA: {
+        return { ...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers }
+      }
+      case SET_INTERVIEW: {
+        const dayData = state.days.filter(d => d.name === state.day)
+
+        const spotsCount = (day) => {
+          let result = 0;
+          day.appointments.forEach(appointment => {
+            (!action.appointments[appointment].interview && result++)
+          })
+          return result;
+        }
+
+        const updatedDay = { ...dayData[0], spots: spotsCount(dayData[0])};
+        const dayId = state.days.indexOf(dayData[0]);
+        const days = [...state.days.slice(0, dayId),  updatedDay, ...state.days.slice( dayId + 1, state.days.length)];
+
+        return { ...state, appointments: action.appointments, days };
+      }
+      default: {
+        throw new Error(
+          `Tried to reduce with unsupported action type: ${action.type}`
+        );
+      }
+    }
+  };
+  
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
     appointments: {},
-    interviwers: {}
+    interviewers: {}
   });
-
-  const setDay = day => dispatch({ type: SET_DAY, day });
-
-  useEffect(() => {
-    let promiseDays = axios.get(`/api/days`);
-    let promiseAppointments = axios.get(`/api/appointments`);
-    let promiseInterviewers = axios.get(`/api/interviewers`);
-
-    Promise.all([promiseDays, promiseAppointments, promiseInterviewers]).then(
-      all => {
-        dispatch({
-          type: SET_APPLICATION_DATA,
-          days: all[0].data,
-          appointments: all[1].data,
-          interviewers: all[2].data
-        });
-      }
-    );
-  }, []);
+  
+  const setDay = day => dispatch({ type: SET_DAY, day});
   const bookInterview = (id, interview) => {
     const appointment = {
       ...state.appointments[id],
-      interview
+      interview: { ...interview }
     };
-    return axios.put(`api/appointments/${id}`, appointment).then(() => {
-      if (!state.appointments[id].interview) {
-        const dayObject = state.days.find(day => day.name === state.day);
-        state.days[dayObject.id - 1].spots--;
-        dispatch({ type: SET_INTERVIEW, id, interview });
-      } else {
-        dispatch({ type: SET_INTERVIEW, id, interview });
-      }
-    });
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    return axios
+      .put(`/api/appointments/${id}`, { interview })
+      .then(() => dispatch({ type: SET_INTERVIEW, appointments }));
   };
 
-  //deletes the appointment
-  const cancelInterview = id => {
-    return axios.delete(`/api/appointments/${id}`).then(() => {
-      const dayObject = state.days.find(day => day.name === state.day);
-      state.days[dayObject.id - 1].spots++;
-      dispatch({ type: SET_INTERVIEW, id, interview: null });
-    });
+  const cancelInterview = (id) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    return axios
+      .delete(`/api/appointments/${id}`)
+      .then(() => dispatch({ type: SET_INTERVIEW, appointments }));
   };
+  
+  useEffect(() => {
+    const promiseDays = axios.get("/api/days");
+    const promiseAppointments = axios.get("/api/appointments");
+    const promiseInterviewers = axios.get("/api/interviewers");
 
-  const formatSpots = prop => {
-    if (prop > 0) {
-      return (
-        <span>
-          <span data-testid="spotsRemaining">{prop}</span> spot{prop > 1 && "s"}{" "}
-          remaining
-        </span>
-      );
-    }
-    return (
-      <span>
-        <span data-testid="spotsRemaining">no</span> spots remaining
-      </span>
-    );
-  };
-  return {
-    state,
-    setDay,
-    bookInterview,
-    cancelInterview,
-    formatSpots
-  };
+    Promise.all([promiseDays, promiseAppointments, promiseInterviewers])
+      .then(all => {
+        dispatch({ type: SET_APPLICATION_DATA, days: all[0].data, appointments: all[1].data, interviewers: all[2].data  })
+      })
+  }, [])
+  return { state, setDay, bookInterview, cancelInterview };
 }
