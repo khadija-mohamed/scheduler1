@@ -2,16 +2,14 @@ import React from "react";
 
 import "components/Button.scss";
 
-export default function Button(props) {
-   let buttonClass = "button";
+import classNames from "classnames";
 
-   if (props.confirm) {
-     buttonClass += " button--confirm";
-   }
- 
-   if (props.danger) {
-     buttonClass += " button--danger";
-   }
+export default function Button(props) {
+
+   const buttonClass = classNames("button", {
+      " button--confirm": props.confirm,
+      " button--danger": props.danger
+   });
 
    return (
      <button
