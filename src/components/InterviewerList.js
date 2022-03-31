@@ -18,4 +18,3 @@ import React from 'react'
       })
       return( interviewers)
        };
-

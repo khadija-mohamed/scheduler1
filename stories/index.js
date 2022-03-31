@@ -1,5 +1,4 @@
 import React from "react";
-
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import DayListItem from "components/DayListItem.js";
@@ -8,7 +7,13 @@ import DayList from "components/DayList.js"
 import Button from "components/Button";
 import InterviewerList from "components/InterviewerList"
 import InterviewerListItem from "components/InterviewerListItem"
-
+import Appointment from "components/Appointment/Index.js"
+import Header from "components/Appointment/Header.js"
+import Empty from "components/Appointment/Empty.js"
+import Show from "components/Appointment/Show.js"
+import Confirm from "components/Appointment/Confirm.js"
+import Status from "components/Appointment/Status.js"
+import Error from "components/Appointment/Error.js"
 
 //button story//
 storiesOf("Button", module)
@@ -138,4 +143,19 @@ storiesOf("InterviewerListItem", module)
       />
     ))
 
-    
+    //story for appointment //
+    storiesOf("Appointment", module)
+    .addParameters({
+      backgrounds: [{ name: "white", value: "#fff", default: true }]
+    })
+    .add("Appointment", () => <Appointment />)
+    .add("Appointment with Time", () => <Appointment time="12pm" />)
+    .add("Header", () => <Header time="12pm" /> )
+    .add("Empty", () => <Empty onAdd={action("onAdd")} />)
+    .add("Show", () => <Show onDelete={action("onDelete")} onEdit={action("onEdit")} />)
+    .add("Confirm", () => <Confirm message="Delete the appointment?" onCancel={action("onCancel")} onConfirm={action("onConfirm")}  />)
+    .add("Status when Deleting", () => <Status message="Deleting" />)
+    .add("Status when Saving", () => <Status message="Saving" />)
+     .add("Error", () => <Error message="Could not delete appointment." onClose={action("onClose")} />)
+
+;
