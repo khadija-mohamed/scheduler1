@@ -4,7 +4,6 @@ import InterviewerList from "components/InterviewerList"
  export default function (props) {
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-
   function reset(){
     setName("")
     setInterviewer(null)
@@ -14,7 +13,6 @@ import InterviewerList from "components/InterviewerList"
     reset()
     props.onCancel()
   }
-
   return (
     <main className="appointment__card appointment__card--create">
     <section className="appointment__card-left">
@@ -26,9 +24,7 @@ import InterviewerList from "components/InterviewerList"
           type="text"
           placeholder="Enter Student Name"
           value={name}
-          onChange={(event) => setName(event.target.value)}
-
-        />
+          onChange={(event) => setName(event.target.value)} />
       </form>
       <InterviewerList interviewers={props.interviewers} value={interviewer} onChange={setInterviewer} />
     </section>
@@ -39,7 +35,6 @@ import InterviewerList from "components/InterviewerList"
       </section>
     </section>
   </main>
-// name:String
 
   )
  }
