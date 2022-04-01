@@ -17,6 +17,7 @@ import Status from "components/Appointment/Status";
 import Error from "components/Appointment/Error";
 import Form from "components/Appointment/Form";
 
+// story for button //
 storiesOf("Button", module)
   .addParameters({
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
@@ -32,10 +33,12 @@ storiesOf("Button", module)
       Disabled
     </Button>
   ));
+
+  // story of daylistitem //
 storiesOf("DayListItem", module) //Initiates Storybook and registers our DayListItem component
   .addParameters({
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
-  }) // Provides the default background color for our component
+  }) 
   .add("Unselected", () => <DayListItem name="Monday" spots={5} />) // To define our stories, we call add() once for each of our test states to generate a story
   .add("Selected", () => <DayListItem name="Monday" spots={5} selected />) 
   .add("Full", () => <DayListItem name="Monday" spots={0} />)
@@ -60,6 +63,7 @@ storiesOf("DayListItem", module) //Initiates Storybook and registers our DayList
     },
   ];
   
+  // story for daylist //
   storiesOf("DayList", module)
     .addParameters({
       backgrounds: [{ name: "dark", value: "#222f3e", default: true }],
@@ -76,6 +80,7 @@ storiesOf("DayListItem", module) //Initiates Storybook and registers our DayList
     avatar: "https://i.imgur.com/LpaY82x.png"
   };
     
+  // story for interviewerListitem //
   storiesOf("InterviewerListItem", module)
     .addParameters({
       backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
@@ -111,6 +116,7 @@ storiesOf("DayListItem", module) //Initiates Storybook and registers our DayList
     { id: 5, name: "Sven Jones", avatar: "https://i.imgur.com/twYrpay.jpg" }
   ];
   
+  // story for interviewerlist //
   storiesOf("InterviewerList", module)
     .addParameters({
       backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
@@ -128,6 +134,8 @@ storiesOf("DayListItem", module) //Initiates Storybook and registers our DayList
         onChange={action("onChange")}
       />
     ));
+
+    // story for appointment components //
   storiesOf("Appointment", module)
   .addParameters({
     backgrounds: [{ name: "white", value: "#fff", default: true }]
