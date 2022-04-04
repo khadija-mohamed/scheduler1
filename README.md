@@ -21,3 +21,10 @@ npm test
 ```sh
 npm run storybook
 ```
+## Final Product 
+
+!["Main Page"](https://github.com/khadija-mohamed/scheduler1/blob/master/docs/main%20page.png)
+!["Adding new interview"](https://github.com/khadija-mohamed/scheduler1/blob/master/docs/adding%20new%20.png)
+!["Saving"](https://github.com/khadija-mohamed/scheduler1/blob/master/docs/saving.png)
+!["Delete confirm"](https://github.com/khadija-mohamed/scheduler1/blob/master/docs/confirm.png)
+!["Deleting"](https://github.com/khadija-mohamed/scheduler1/blob/master/docs/deleting.png)
