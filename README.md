@@ -21,6 +21,13 @@ npm test
 ```sh
 npm run storybook
 ```
+
+## Running Scheduler API
+
+```sh
+npm run scheduler-api
+
+```
 ## Final Product 
 
 !["Main Page"](https://github.com/khadija-mohamed/scheduler1/blob/master/docs/main%20page.png)
